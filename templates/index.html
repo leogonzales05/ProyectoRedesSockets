@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitor de Red - Servidor.py</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1><span class="blink">></span> MONITOR DE RED_</h1>
+            <div class="status-bar">
+                <span id="connection-status" class="status offline">DESCONECTADO</span>
+                <span id="clock">00:00:00</span>
+            </div>
+        </header>
+
+        <main>
+            <div class="grid-container">
+                <!-- Panel de Logs del Servidor -->
+                <div class="panel logs-panel">
+                    <h2><i class="icon">📄</i> LOGS DEL SERVIDOR</h2>
+                    <div id="server-logs" class="terminal-window">
+                        <!-- Logs se insertarán aquí -->
+                    </div>
+                </div>
+
+                <!-- Panel de Paquetes Capturados -->
+                <div class="panel packets-panel">
+                    <h2><i class="icon">📦</i> TRÁFICO EN VIVO</h2>
+                    <div class="table-container">
+                        <table id="packets-table">
+                            <thead>
+                                <tr>
+                                    <th>Hora</th>
+                                    <th>Protocolo</th>
+                                    <th>Origen</th>
+                                    <th>Destino</th>
+                                    <th>Info</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Paquetes se insertarán aquí -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Panel de Detalles del Paquete -->
+                <div class="panel details-panel">
+                    <h2><i class="icon">🔍</i> INSPECTOR DE PAQUETE</h2>
+                    <div id="packet-details" class="code-view">
+                        <p class="placeholder">Selecciona un paquete para ver detalles...</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+
+</html>

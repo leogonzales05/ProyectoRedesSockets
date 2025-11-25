@@ -1,0 +1,246 @@
+:root {
+    --bg-color: #0d0d0d;
+    --panel-bg: #1a1a1a;
+    --text-color: #e0e0e0;
+    --accent-color: #00ff41;
+    /* Matrix Green */
+    --accent-dim: #008f11;
+    --highlight: #ffffff;
+    --border-color: #333;
+    --font-mono: 'JetBrains Mono', monospace;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--font-mono);
+    height: 100vh;
+    overflow-y: auto;
+    /* Changed from hidden to auto */
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 600px;
+    /* Prevent layout from squashing too much */
+    padding: 10px;
+}
+
+/* Header */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    border-bottom: 1px solid var(--accent-dim);
+    margin-bottom: 10px;
+}
+
+h1 {
+    font-size: 1.5rem;
+    color: var(--accent-color);
+    text-shadow: 0 0 5px var(--accent-dim);
+}
+
+.blink {
+    animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker {
+    50% {
+        opacity: 0;
+    }
+}
+
+.status-bar {
+    font-size: 0.9rem;
+}
+
+.status {
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+.status.online {
+    background-color: rgba(0, 255, 65, 0.2);
+    color: var(--accent-color);
+    border: 1px solid var(--accent-color);
+}
+
+.status.offline {
+    background-color: rgba(255, 0, 0, 0.2);
+    color: #ff4444;
+    border: 1px solid #ff4444;
+}
+
+/* Layout */
+.grid-container {
+    display: grid;
+    grid-template-columns: 300px 1fr 300px;
+    grid-template-rows: 1fr;
+    gap: 10px;
+    flex: 1;
+    min-height: 0;
+    /* Important for scrolling */
+}
+
+.panel {
+    background-color: var(--panel-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.panel h2 {
+    font-size: 1rem;
+    padding: 10px;
+    background-color: #252525;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--highlight);
+}
+
+/* Logs Panel */
+.logs-panel {
+    grid-column: 1;
+}
+
+.terminal-window {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+    font-size: 0.8rem;
+    font-family: var(--font-mono);
+    color: #bbb;
+}
+
+.log-entry {
+    margin-bottom: 5px;
+    border-bottom: 1px solid #222;
+    padding-bottom: 2px;
+}
+
+.log-time {
+    color: #666;
+    margin-right: 5px;
+}
+
+.log-source {
+    color: var(--accent-color);
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+.log-msg {
+    word-break: break-all;
+}
+
+/* Packets Panel */
+.packets-panel {
+    grid-column: 2;
+}
+
+.table-container {
+    flex: 1;
+    overflow: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+}
+
+th {
+    background-color: #252525;
+    position: sticky;
+    top: 0;
+    text-align: left;
+    padding: 8px;
+    color: var(--accent-color);
+}
+
+td {
+    padding: 6px 8px;
+    border-bottom: 1px solid #222;
+    cursor: pointer;
+}
+
+tr:hover {
+    background-color: #2a2a2a;
+}
+
+tr.selected {
+    background-color: rgba(0, 255, 65, 0.1);
+    border-left: 3px solid var(--accent-color);
+}
+
+/* Details Panel */
+.details-panel {
+    grid-column: 3;
+}
+
+.code-view {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+    font-size: 0.85rem;
+    white-space: pre-wrap;
+}
+
+.detail-section {
+    margin-bottom: 15px;
+}
+
+.detail-title {
+    color: var(--accent-color);
+    border-bottom: 1px solid #333;
+    margin-bottom: 5px;
+    padding-bottom: 2px;
+    font-weight: bold;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 3px;
+}
+
+.detail-key {
+    color: #888;
+}
+
+.detail-val {
+    color: #ddd;
+    text-align: right;
+}
+
+/* Scrollbars */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #1a1a1a;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #444;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}

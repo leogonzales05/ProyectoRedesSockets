@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cliente {{ mode }} - Monitor de Red</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <style>
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 150px);
+            background: rgba(10, 10, 15, 0.8);
+            border: 1px solid #333;
+            border-radius: 5px;
+            padding: 1rem;
+            overflow-y: auto;
+            margin-bottom: 1rem;
+            font-size: 18px;
+        }
+
+        .message {
+            margin-bottom: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 4px;
+            max-width: 80%;
+        }
+
+        .message.sent {
+            align-self: flex-end;
+            background: rgba(0, 255, 136, 0.1);
+            border-left: 3px solid #00ff88;
+            color: #e0e0e0;
+        }
+
+        .message.received {
+            align-self: flex-start;
+            background: rgba(0, 136, 255, 0.1);
+            border-left: 3px solid #0088ff;
+            color: #e0e0e0;
+        }
+
+        .input-area {
+            display: flex;
+            gap: 10px;
+        }
+
+        .input-area input {
+            flex-grow: 1;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            color: #00ff88;
+            padding: 10px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .input-area button {
+            background: #00ff88;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            font-weight: bold;
+            cursor: pointer;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .input-area button:hover {
+            background: #00cc6a;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #ff3333;
+            margin-right: 5px;
+        }
+
+        .status-indicator.connected {
+            background-color: #00ff88;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1><span class="blink">></span> CLIENTE {{ mode }}_</h1>
+            <div class="status-bar">
+                <span id="connection-status"><span class="status-indicator" id="status-dot"></span><span
+                        id="status-text">DESCONECTADO</span></span>
+            </div>
+        </header>
+
+        <main>
+            <div class="panel">
+                <h2><i class="icon">💬</i> CHAT / COMANDOS</h2>
+                <div id="chat-box" class="chat-container">
+                    <!-- Mensajes aparecerán aquí -->
+                </div>
+
+                <div class="input-area">
+                    <input type="text" id="message-input" placeholder="Escribe un mensaje o comando..."
+                        autocomplete="off">
+                    <button id="send-btn">ENVIAR</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const socket = io();
+        const chatBox = document.getElementById('chat-box');
+        const messageInput = document.getElementById('message-input');
+        const sendBtn = document.getElementById('send-btn');
+        const statusDot = document.getElementById('status-dot');
+        const statusText = document.getElementById('status-text');
+
+        function addMessage(text, type) {
+            const msgDiv = document.createElement('div');
+            msgDiv.classList.add('message', type);
+            msgDiv.textContent = `[${new Date().toLocaleTimeString()}] ${text}`;
+            chatBox.appendChild(msgDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        socket.on('connect', () => {
+            statusDot.classList.add('connected');
+            statusText.textContent = 'CONECTADO AL FRONTEND';
+            addMessage('Conectado al servidor de interfaz.', 'received');
+        });
+
+        socket.on('disconnect', () => {
+            statusDot.classList.remove('connected');
+            statusText.textContent = 'DESCONECTADO';
+            addMessage('Desconectado del servidor de interfaz.', 'received');
+        });
+
+        socket.on('server_response', (data) => {
+            addMessage(data.message, 'received');
+        });
+
+        socket.on('client_log', (data) => {
+            addMessage(`LOG: ${data.message}`, 'received');
+        });
+
+        function sendMessage() {
+            const msg = messageInput.value.trim();
+            if (msg) {
+                socket.emit('send_message', { message: msg });
+                addMessage(`Yo: ${msg}`, 'sent');
+                messageInput.value = '';
+            }
+        }
+
+        sendBtn.addEventListener('click', sendMessage);
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+    </script>
+</body>
+
+</html>
