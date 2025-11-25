@@ -11,7 +11,7 @@ ServidorWeb.py funcione, necesitas tener instalado Npcap. Si no lo tienes, desc�
 
 ## 2. Configuración de Direcciones
 El código tiene configuraciones específicas que probablemente necesites ajustar según tu entorno de prueba (Local o Red):
-En ServidorWeb.py:
+\n En ServidorWeb.py:
 Busca la línea que dice INTERFACE = "ZeroTier Virtual Port".
 Si no estás usando ZeroTier, debes cambiar "ZeroTier Virtual Port" por el nombre de tu adaptador de red real (por ejemplo, "Wi-Fi", "Ethernet" o el nombre que aparezca en tus conexiones de red). Esto es necesario para que el servidor pueda "ver" y capturar el tráfico.
 En ClienteTCPWeb.py y ClienteUDPWeb.py:
